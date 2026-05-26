@@ -24,10 +24,6 @@ pix_array_13 = [28]
 pix_array_14 = [14, 22]
 pix_array_15 = [12, 13, 20, 21]
 pix_array_16 = [31, 32]
-pix_array_17 = [11]     # ???
-pix_array_18 = [34]
-pix_array_19 = [35]
-pix_array_20 = [11]      # ???
 #------------------------------------------------------------------------------
 
 obj_offset = 0          # Offset bei Zählung ab 1 = -1
