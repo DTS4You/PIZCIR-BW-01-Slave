@@ -7,10 +7,8 @@ from machine import Pin, Timer      # type: ignore
 from libs.module_init import Global_Module as MyModule
 import time                         # type: ignore
 
-TIME_LOOP   = 0.1
-TIME_DELAY  = 10
-input_int   = False
-input_val   = 0x00
+TIME_LOOP   = 0.01      # 10ms
+TIME_DELAY  = 50        # x TIME_LOOP for Blink 
 
 #------------------------------------------------------------------------------
 pix_array_01 = [ 1]
@@ -31,7 +29,7 @@ pix_array_15 = [15]
 pix_array_16 = [16]
 #------------------------------------------------------------------------------
 
-obj_offset = 0          # Offset bei Zählung ab 1 = -1
+obj_offset = -1          # Offset bei Zählung ab 1 = -1
 
 def blink_func():
     MyWS2812.do_blink()
@@ -42,12 +40,20 @@ def blink_func():
 def main():
 
     print("=== Start Main ===")
-
+    
+    input_val       = 0x00
+    blink_couter    = 0
+    
     xio = MyXIO.XIO("INPUT")
     
     MyWS2812.do_all_def()	# Alle Leds auf Default-Wert
        
     while (True):
+
+        if blink_couter > TIME_DELAY:
+            blink_couter = 0
+            blink_func()
+
         #print(hex(xio.read_io()))
         io_state = xio.read_io() & 0x0f
         #print(hex(io_state))
@@ -55,42 +61,45 @@ def main():
             input_val = io_state
             if io_state == 0:
                 print("State 0")
+                MyWS2812.do_all_def()	# Alle Leds auf Default-Wert
             if io_state == 1:
                 for i in pix_array_01:
                     print("State 1")
-                    #MyWS2812.set_led_obj(i + obj_offset, MyDecode.get_value_2())
+                    MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 2:
                 for i in pix_array_01:
                     print("State 2")
-                    #MyWS2812.set_led_obj(i + obj_offset, MyDecode.get_value_2())
+                    MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 3:
                 for i in pix_array_01:
                     print("State 3")
-                    #MyWS2812.set_led_obj(i + obj_offset, MyDecode.get_value_2())
+                    MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 4:
                 for i in pix_array_01:
                     print("State 4")
-                    #MyWS2812.set_led_obj(i + obj_offset, MyDecode.get_value_2())
+                    MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 5:
                 for i in pix_array_01:
                     print("State 5")
-                    #MyWS2812.set_led_obj(i + obj_offset, MyDecode.get_value_2())
+                    MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 6:
                 for i in pix_array_01:
                     print("State 6")
-                    #MyWS2812.set_led_obj(i + obj_offset, MyDecode.get_value_2())
+                    MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 7:
                 for i in pix_array_01:
                     print("State 7")
-                    #MyWS2812.set_led_obj(i + obj_offset, MyDecode.get_value_2())
+                    MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 8:
                 for i in pix_array_01:
                     print("State 8")
-                    #MyWS2812.set_led_obj(i + obj_offset, MyDecode.get_value_2())
+                    MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 9:
                 pass
         
-    time.sleep(TIME_LOOP)
+        blink_couter = blink_couter + 1
+        # Loop-Delay !!!
+        time.sleep(TIME_LOOP)
 
 
     
