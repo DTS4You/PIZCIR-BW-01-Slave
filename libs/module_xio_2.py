@@ -77,7 +77,7 @@ def main():
     try:
         print("Start")
 
-        debug = "OUTPUT"
+        debug = "INPUT"
 
         if debug == "OUTPUT":
             print("Write Output")
