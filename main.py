@@ -11,14 +11,15 @@ TIME_LOOP   = 0.01      # 10ms
 TIME_DELAY  = 50        # x TIME_LOOP for Blink 
 
 #------------------------------------------------------------------------------
-pix_array_01 = [ 1]
-pix_array_02 = [ 2]
-pix_array_03 = [ 3]
-pix_array_06 = [ 4]
-pix_array_04 = [ 5]
-pix_array_05 = [ 6]
-pix_array_07 = [ 7]
-pix_array_08 = [ 8]
+pix_array_01 = [ 1]            # H2SAT
+pix_array_02 = [ 2]            # EnMAP
+pix_array_03 = [ 3, 4, 7]      # SARah             11, 12, 15   
+pix_array_04 = [ 4]            # SAR-Lupe
+pix_array_05 = [ 5]            # SATCOMBw
+pix_array_06 = [ 5, 6]         # TerraSAR-X        13, 14
+pix_array_07 = [ 7]            # SPOCK wird nicht dargestellt       
+pix_array_08 = [ 1, 2]         # Galileo           9 , 10       
+#---
 pix_array_09 = [ 9]
 pix_array_10 = [10]
 pix_array_11 = [11]
@@ -65,33 +66,33 @@ def main():
             if io_state == 1:
                 for i in pix_array_01:
                     print("State 1")
-                    MyWS2812.set_led_obj(i + obj_offset, "blink")
+                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 2:
-                for i in pix_array_01:
+                for i in pix_array_02:
                     print("State 2")
-                    MyWS2812.set_led_obj(i + obj_offset, "blink")
+                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 3:
-                for i in pix_array_01:
+                for i in pix_array_03:
                     print("State 3")
                     MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 4:
-                for i in pix_array_01:
+                for i in pix_array_04:
                     print("State 4")
-                    MyWS2812.set_led_obj(i + obj_offset, "blink")
+                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 5:
-                for i in pix_array_01:
+                for i in pix_array_05:
                     print("State 5")
-                    MyWS2812.set_led_obj(i + obj_offset, "blink")
+                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 6:
-                for i in pix_array_01:
+                for i in pix_array_06:
                     print("State 6")
                     MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 7:
-                for i in pix_array_01:
+                for i in pix_array_07:
                     print("State 7")
-                    MyWS2812.set_led_obj(i + obj_offset, "blink")
+                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 8:
-                for i in pix_array_01:
+                for i in pix_array_08:
                     print("State 8")
                     MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 9:
