@@ -64,36 +64,41 @@ def main():
                 print("State 0")
                 MyWS2812.do_all_def()	# Alle Leds auf Default-Wert
             if io_state == 1:
+                print("State 1")
                 for i in pix_array_01:
-                    print("State 1")
+                    pass
                     #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 2:
+                print("State 2")
                 for i in pix_array_02:
-                    print("State 2")
+                    pass
                     #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 3:
+                print("State 3")
                 for i in pix_array_03:
-                    print("State 3")
                     MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 4:
+                print("State 4")
                 for i in pix_array_04:
-                    print("State 4")
+                    pass
                     #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 5:
+                print("State 5")
                 for i in pix_array_05:
-                    print("State 5")
+                    pass
                     #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 6:
+                print("State 6")
                 for i in pix_array_06:
-                    print("State 6")
                     MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 7:
+                print("State 7")
                 for i in pix_array_07:
-                    print("State 7")
+                    pass
                     #MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 8:
+                print("State 8")
                 for i in pix_array_08:
-                    print("State 8")
                     MyWS2812.set_led_obj(i + obj_offset, "blink")
             if io_state == 9:
                 pass
