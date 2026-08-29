@@ -4,7 +4,7 @@
 ### Version: 1.00          02.06.2026              ###
 ######################################################
 from machine import Pin, Timer      # type: ignore
-from libs.module_init import Global_Module as MyModule
+from libs.modul_init import Global_Module as MyModule
 import time                         # type: ignore
 
 TIME_LOOP   = 0.01      # 10ms
@@ -152,7 +152,7 @@ if __name__ == "__main__":
 
     if MyModule.inc_decoder:
         print("Decode -> Load-Module")
-        import libs.module_decode as MyDecode
+        import libs.modul_decode as MyDecode
         print("Decode -> Setup")
         MyDecode.decode_setup()
         ### Test ###

@@ -4,13 +4,13 @@
 ### Version: 1.01          24.08.2026              ###
 ######################################################
 from machine import UART, Pin
-from libs.modul_uart_async import AsyncUART
+#from libs.modul_uart_async import AsyncUART            # Wird nur beim Master genutzt !!!
 from libs.modul_xio_bus import ParallelBus
 import time, sys
 import uctypes
 import uasyncio as asyncio
-import libs.module_ws2812_dma as myws2812
-import libs.module_hwdebug as myhwdebug
+import libs.modul_ws2812_dma as myws2812
+import libs.modul_hwdebug as myhwdebug
 import libs.modul_anim_obj as myanim
 import libs.modul_color_index as mycolor
 
@@ -31,30 +31,18 @@ led_offset = 0
 #------------------------------------------------------------------------------
 # Callback-Funktionen
 #------------------------------------------------------------------------------
-# UART -> hat Daten empfangen
-def daten_empfangen_handler(nachricht):
-    print(f"[RX Empfangen]: {nachricht}")
-    
-    # Beispiel: Auf bestimmte Befehle reagieren und direkt antworten
-    if nachricht.upper() == "PING":
-        uart_dev.send_line("PONG")
-#------------------------------------------------------------------------------
 # 4-Bit parallel-Bus
 def on_string_received(text):
     print(f"\n[RX Event] Empfangener Text: '{text}' (Länge: {len(text)})")
+
 #------------------------------------------------------------------------------
-# Modul-Instanz erstellen (auf UART0, GP0/GP1)
-uart_dev = AsyncUART(
-    uart_id=0,
-    baudrate=9600,
-    tx_pin=0,
-    rx_pin=1,
-    on_receive=daten_empfangen_handler
-)
+# Objekte vorbereiten
+#------------------------------------------------------------------------------
 # Modul-Bus-Instanz erstellen
 bus = ParallelBus(
     data_pins=[10, 11, 12, 13], pin_strobe_high=14, pin_strobe_low=15
 )
+
 #------------------------------------------------------------------------------
 # --- Hintergrund-Task simulieren ---
 #------------------------------------------------------------------------------
@@ -62,19 +50,10 @@ async def background_heartbeat():
     print("Starte Background Task...")
     blink_time = 0.5
     blink_state = False
-    counter = 1
     while True:
         #print("Hintergrund-Task: Status-LED blinken")
         hwdebug.write_output(blink_state)
         blink_state = not blink_state
-        uart_dev.send_line("Heartbeat -> " + str(counter))
-        # Beispiel: Senden nach Bedarf ausführen
-        msg = "do,anim," + str(counter)
-        print(msg)
-        await bus.send_text(msg)
-        counter = counter + 1
-        if counter > 99:
-            counter = 1
         await asyncio.sleep(blink_time)
 #------------------------------------------------------------------------------
 
@@ -125,8 +104,6 @@ async def main_loop():
 # --- Alle Tasks starten ---
 #-----------------------------------------------------------------------------
 async def main():
-    # UART-Empfangstask im Hintergrund starten
-    uart_dev.start()
     print("Starte Main-Loop und Hintergrund-Task...")
     await asyncio.gather(
         main_loop(),
