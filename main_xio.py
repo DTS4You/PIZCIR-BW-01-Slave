@@ -8,21 +8,21 @@ bus = ParallelBus(
 
 
 def on_string_received(text):
-    print(f"\n[RX Event] Empfangener Text: '{text}' (Länge: {len(text)})")
+    print(f"[RX Event] Empfangener Text: '{text}' (Länge: {len(text)})")
 
 
 async def main():
-    print("RP2040 Bus aktiv (Modul geladen). Sending data...")
+    print("RP2040 Bus aktiv (Modul geladen). Empfange Daten...")
 
     # Empfänger-Task aus der Modul-Klasse starten
-    #asyncio.create_task(bus.listen_loop(on_string_received))
+    asyncio.create_task(bus.listen_loop(on_string_received))
 
     counter = 0
     while True:
         # Beispiel: Senden nach Bedarf ausführen
-        msg = "do,anim," + str(counter)
-        print(msg)
-        await bus.send_text(msg)
+        #msg = "do,anim," + str(counter)
+        #print(msg)
+        #await bus.send_text(msg)
 
         counter += 1
         await asyncio.sleep(0.3)
