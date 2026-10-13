@@ -1,168 +1,36 @@
-######################################################
-### Main-Program                                   ###
-### Projekt: BIZCIR-BW-01-Slave                    ###
-### Version: 1.00          02.06.2026              ###
-######################################################
-from machine import Pin, Timer      # type: ignore
-from libs.modul_init import Global_Module as MyModule
-import time                         # type: ignore
+import asyncio
+from libs.modul_xio_bus import ParallelBus
+import libs.modul_hwdebug as mydebug
 
-TIME_LOOP   = 0.01      # 10ms
-TIME_DELAY  = 50        # x TIME_LOOP for Blink 
+# Bus-Instanz erstellen
+bus = ParallelBus(
+    data_pins=[10, 11, 12, 13], pin_strobe_high=14, pin_strobe_low=15
+)
 
-#------------------------------------------------------------------------------
-pix_array_01 = [ 1]            # H2SAT
-pix_array_02 = [ 2]            # EnMAP
-pix_array_03 = [ 3, 4, 7]      # SARah             11, 12, 15   
-pix_array_04 = [ 4]            # SAR-Lupe
-pix_array_05 = [ 5]            # SATCOMBw
-pix_array_06 = [ 5, 6]         # TerraSAR-X        13, 14
-pix_array_07 = [ 7]            # SPOCK wird nicht dargestellt       
-pix_array_08 = [ 1, 2]         # Galileo           9 , 10       
-#---
-pix_array_09 = [ 9]
-pix_array_10 = [10]
-pix_array_11 = [11]
-pix_array_12 = [12]
-pix_array_13 = [13]
-pix_array_14 = [14]
-pix_array_15 = [15]
-pix_array_16 = [16]
-#------------------------------------------------------------------------------
+hwdebug = mydebug.HWDEBUG()
 
-obj_offset = -1          # Offset bei Zählung ab 1 = -1
+global debug_led
 
-def blink_func():
-    MyWS2812.do_blink()
+debug_led = True  # Variable für die Debug-LED (True = LED an, False = LED aus)
 
-# ------------------------------------------------------------------------------
-# --- Main Function                                                          ---
-# ------------------------------------------------------------------------------
-def main():
+def on_string_received(text):
+    global debug_led
+    print(f"[RX Event] Empfangener Text: '{text}' (Länge: {len(text)})")
+    hwdebug.write_output(debug_led)  # LED einschalten
+    debug_led = not debug_led  # Toggle der LED-Variable
 
-    print("=== Start Main ===")
-    
-    input_val       = 0x00
-    blink_couter    = 0
-    
-    xio = MyXIO.XIO("INPUT")
-    
-    MyWS2812.do_all_def()	# Alle Leds auf Default-Wert
-       
-    while (True):
+async def main():
+    print("RP2040 Bus aktiv (Modul geladen). Empfange Daten...")
 
-        if blink_couter > TIME_DELAY:
-            blink_couter = 0
-            blink_func()
+    # Empfänger-Task aus der Modul-Klasse starten
+    asyncio.create_task(bus.listen_loop(on_string_received))
 
-        #print(hex(xio.read_io()))
-        io_state = xio.read_io() & 0x0f
-        #print(hex(io_state))
-        if io_state != input_val:
-            input_val = io_state
-            if io_state == 0:
-                print("State 0")
-                MyWS2812.do_all_def()	# Alle Leds auf Default-Wert
-            if io_state == 1:
-                print("State 1")
-                for i in pix_array_01:
-                    pass
-                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
-            if io_state == 2:
-                print("State 2")
-                for i in pix_array_02:
-                    pass
-                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
-            if io_state == 3:
-                print("State 3")
-                for i in pix_array_03:
-                    MyWS2812.set_led_obj(i + obj_offset, "blink")
-            if io_state == 4:
-                print("State 4")
-                for i in pix_array_04:
-                    pass
-                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
-            if io_state == 5:
-                print("State 5")
-                for i in pix_array_05:
-                    pass
-                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
-            if io_state == 6:
-                print("State 6")
-                for i in pix_array_06:
-                    MyWS2812.set_led_obj(i + obj_offset, "blink")
-            if io_state == 7:
-                print("State 7")
-                for i in pix_array_07:
-                    pass
-                    #MyWS2812.set_led_obj(i + obj_offset, "blink")
-            if io_state == 8:
-                print("State 8")
-                for i in pix_array_08:
-                    MyWS2812.set_led_obj(i + obj_offset, "blink")
-            if io_state == 9:
-                pass
-        
-        blink_couter = blink_couter + 1
-        # Loop-Delay !!!
-        time.sleep(TIME_LOOP)
+    while True:
+        await asyncio.sleep(0.3)
 
 
-    
+try:
+    asyncio.run(main())
+except KeyboardInterrupt:
+    print("\nProgramm gestoppt.")
 
-    print("=== End of Main ===")
-
-# ==============================================================================
-# ==============================================================================
-    
-# ###############################################################################
-# ### Main                                                                    ###
-# ###############################################################################
-
-
-if __name__ == "__main__":
-
-    if MyModule.inc_ws2812:
-        print("WS2812 -> Load-Module")
-        import libs.module_ws2812_v2 as MyWS2812         # Modul WS2812  -> WS2812-Ansteuerung
-        print("WS2812 -> Setup")
-        MyWS2812.setup_ws2812()
-        ### Test ###
-        #print("WS2812 -> Run self test")
-        MyWS2812.self_test()
-        #print("WS2812 -> Blink Test")
-        #MyWS2812.do_blink_test()
-        #print("WS2812 -> Dot-Test")
-        #MyWS2812.do_dot_test()
-    
-    if MyModule.inc_xio:
-        print("XIO -> Load-Module")
-        import libs.module_xio_2 as MyXIO
-    else:
-        print("XIO -> nicht vorhanden")
-    
-    if MyModule.inc_serial:
-        print("Serial-COM -> Load-Module")
-        import libs.module_serial as MySerial
-        print("Serial-Con -> Setup")
-        MySerial.sercon_setup()
-        ### Test ###
-        #print("Serial-Con -> Test")
-        #MySerial.sercon_write_out("Start Test")
-
-    if MyModule.inc_decoder:
-        print("Decode -> Load-Module")
-        import libs.modul_decode as MyDecode
-        print("Decode -> Setup")
-        MyDecode.decode_setup()
-        ### Test ###
-        #print("Decode -> Test")
-        #MyDecode.decode_input("Test")
-
-
-    main()      # Start Main $$$
-
-# Normal sollte das Programm hier nie ankommen !
-print("___End of Programm___ !!!")
-
-# ##############################################################################
