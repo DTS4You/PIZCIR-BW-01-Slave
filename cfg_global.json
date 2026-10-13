@@ -2,7 +2,7 @@
     "frame_time":   20,
     "blink_time":  500,
     "debug_time": 1000,
-    "board_modus": "Master",
+    "board_modus": "Slave",
     "load_modul_hwdebug": true,
     "load_modul_anim_obj": true,
     "load_modul_fcode": true,
