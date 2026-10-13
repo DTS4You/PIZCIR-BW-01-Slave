@@ -1,6 +1,6 @@
 import asyncio
-from libs.modul_xio_bus import ParallelBus
-import libs.modul_hwdebug as mydebug
+from libs.xio_bus import ParallelBus
+import libs.hwdebug as mydebug
 
 # Bus-Instanz erstellen
 bus = ParallelBus(

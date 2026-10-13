@@ -5,7 +5,7 @@
 ######################################################
 from machine import UART, Pin
 from libs.modul_uart_async import AsyncUART
-from libs.modul_xio_bus import ParallelBus
+from libs.xio_bus import ParallelBus
 import libs.modul_ws2812_dma as myws2812
 import time, sys
 import uctypes
@@ -13,10 +13,10 @@ import uasyncio as asyncio
 import json
 
 #------------------------------------------------------------------------------
-# WS2812-Instanz erstellen (auf Pin 2, 175 LEDs pro Strip)
+# WS2812-Instanz erstellen (auf Pin 2, 178 LEDs pro Strip)
 #------------------------------------------------------------------------------
 global ws2812
-leds = myws2812.WS2812Fast(start_pin=2, leds_per_strip=175)
+leds = myws2812.WS2812Fast(start_pin=2, leds_per_strip=178)
 #-----------------------------------------------------------------------------
 
 global led_offset
@@ -62,7 +62,7 @@ load_global_config("cfg_global.json")
 if CONFIG["load_modul_hwdebug"]:
     print("[INIT] -> Modul Hardware-Debug wird geladen...")
     global hwdebug
-    import libs.modul_hwdebug as myhwdebug
+    import libs.hwdebug as myhwdebug
     hwdebug = myhwdebug.HWDEBUG()
 else:
     print("[INIT] ## Modul Hardware-Debug wird nicht geladen ##")
