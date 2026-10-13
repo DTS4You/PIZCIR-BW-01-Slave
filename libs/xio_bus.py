@@ -1,6 +1,6 @@
 import asyncio
 import time
-from machine import Pin
+from machine import Pin         # type: ignore
 
 
 class ParallelBus:
