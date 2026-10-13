@@ -131,7 +131,7 @@ leds = WS2812ParallelAsync(
         first_pin=2,
         brightness=CONFIG["leds_brightness"],
         sm_id=0,
-        yield_every=CONFIG["leds_per_stripe"],
+        yield_every=32,
         reset_us=300,
     )
 #-----------------------------------------------------------------------------
@@ -236,16 +236,19 @@ async def do_send_msg_bus(msg=None):
 async def background_heartbeat():
     print("Starte Background Task...")
     # UART-Empfangstask im Hintergrund starten
-    uart_dev.start()
-    blink_time = 500        # Blinkzeit in Millisekunden
+    #uart_dev.start()
+    # XIO-Bus-Empfangstask im Hintergrund starten
+    asyncio.create_task(bus.listen_loop(on_string_received))
+
+    blink_time  = 300        # Blinkzeit in Millisekunden
     blink_state = False
     while True:
         #print("Hintergrund-Task: Status-LED blinken")
-        hwdebug.write_output(blink_state)
-        blink_state = not blink_state
+        hwdebug.write_output(blink_state)       # Status-LED ein-/ausschalten
+        blink_state = not blink_state           # Toggle der LED-Variable
         #uart_dev.send_line("Heartbeat -> " + str(counter))
         #----------------------------------------------------------------------
-        asyncio.create_task(do_send_msg_bus())
+        #asyncio.create_task(do_send_msg_bus())
         #----------------------------------------------------------------------
         await asyncio.sleep_ms(blink_time)
 #------------------------------------------------------------------------------
@@ -320,7 +323,7 @@ finally:
     #--------------------------------------------------------------------------
     print("===RESET===")
     time.sleep(0.3)
-    machine.reset()
+    machine.reset()             # type: ignore
     #___Go_Home___
     #--------------------------------------------------------------------------
 #==============================================================================
