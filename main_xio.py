@@ -26,7 +26,7 @@ async def main():
     asyncio.create_task(bus.listen_loop(on_string_received))
 
     while True:
-        await asyncio.sleep(0.3)
+        await asyncio.sleep_ms(300)  # Haupt-Loop, um die CPU nicht zu blockieren
 
 
 try:
