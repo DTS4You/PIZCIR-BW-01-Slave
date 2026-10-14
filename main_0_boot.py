@@ -130,7 +130,7 @@ def on_string_received(text):
 #------------------------------------------------------------------------------
 
 def decode_to_input(text):
-    if text == "00":
+    if text == "0":
         command = "do,all,def"
         print(f"[RX-Decode] Befehl erkannt: '{command}'")
         new_input_action(command)
@@ -312,19 +312,17 @@ async def background_heartbeat():
 #------------------------------------------------------------------------------
 async def main_loop():
 
-    #frame_time = CONFIG["frame_time"]
-    frame_time = 500
+    frame_time = CONFIG["frame_time"]
+    #frame_time = 500
     print("Starte WS2812-Berechnung...")
     while True:
         leds.clear()
         for s in CONFIG["stripe_list"]:
-            #print(f"S: {s} | {anim_obj[s].default_state}")
-            pass
-        #    anim_obj[s].do_anim_update()
-        #    led_array = anim_obj[s].do_anim_update()
-        #    for led_index, led_color in enumerate(led_array):
-        #        leds.pixel_hex(s, led_index, led_color)
-        leds.pixel_hex(0, 0, 0x080000)  # Beispiel: Setze die erste LED auf Rot
+            anim_obj[s].do_anim_update()
+            led_array = anim_obj[s].do_anim_update()
+            for led_index, led_color in enumerate(led_array):
+                pos = anim_obj[s].start + led_index - 1
+                leds.pixel_hex(anim_obj[s].stripe, pos, led_color)
         await leds.show(copy=False)
         await asyncio.sleep_ms(frame_time)
 
