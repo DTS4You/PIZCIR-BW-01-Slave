@@ -16,6 +16,10 @@ import json
 machine.freq(250_000_000)       # type: ignore
 #------------------------------------------------------------------------------
 
+# Master/Slave-Konfiguration setzen
+#CONFIG_FILE = "cfg_global_master.json"
+CONFIG_FILE = "cfg_global_slave.json"
+
 global led_offset
 led_offset = 0
 
@@ -55,7 +59,7 @@ def load_global_config(filepath="config.json"):
 #==============================================================================
 
 # --- 1. KONFIGURATION BEIM START LADEN ---
-load_global_config("cfg_global.json")
+load_global_config(CONFIG_FILE)
 
 # --- 2. OPTIONALE MODUL-STEUERUNG ---
 if CONFIG["load_modul_hwdebug"]:
@@ -91,8 +95,10 @@ else:
     print("[INIT] ## Modul F-Code wird nicht geladen ##")
 
 print("[Board-Modus]:", CONFIG["board_modus"])
+print("[Stripe-Liste]:", CONFIG["stripe_list"])
 print("[LEDs per Stripe]:", CONFIG["leds_per_stripe"])
 print("[LEDs Helligkeit]:", CONFIG["leds_brightness"])
+print("[Anzahl der Objekte]:", len(CONFIG["stripe_list"]))
 print("[INIT] -> Alle Module geladen. Starte Hauptprogramm...")
 
 
