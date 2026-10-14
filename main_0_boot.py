@@ -126,10 +126,52 @@ def do_go_out(string):
 # 4-Bit parallel-Bus
 def on_string_received(text):
     print(f"\n[RX Event] Empfangener Text: '{text}' (Länge: {len(text)})")
+    decode_to_input(text)
 #------------------------------------------------------------------------------
 
+def decode_to_input(text):
+    if text == "00":
+        command = "do,all,def"
+        print(f"[RX-Decode] Befehl erkannt: '{command}'")
+        new_input_action(command)
+    elif text == "1":
+        command = "do,obj,1,blink"
+        print(f"[RX-Decode] Befehl erkannt: '{command}'")
+        new_input_action(command)
+    elif text == "2":
+        command = "do,obj,2,blink"
+        print(f"[RX-Decode] Befehl erkannt: '{command}'")
+        new_input_action(command)
+    elif text == "3":
+        command = "do,obj,3,blink"
+        print(f"[RX-Decode] Befehl erkannt: '{command}'")
+        new_input_action(command)
+    elif text == "4":
+        command = "do,obj,4,blink"
+        print(f"[RX-Decode] Befehl erkannt: '{command}'")
+        new_input_action(command)
+    elif text == "5":
+        command = "do,obj,5,blink"
+        print(f"[RX-Decode] Befehl erkannt: '{command}'")
+        new_input_action(command)
+    elif text == "6":
+        command = "do,obj,6,blink"
+        print(f"[RX-Decode] Befehl erkannt: '{command}'")
+        new_input_action(command)
+    elif text == "7":
+        command = "do,obj,7,blink"
+        print(f"[RX-Decode] Befehl erkannt: '{command}'")
+        new_input_action(command)
+    elif text == "8":
+        command = "do,obj,8,blink"
+        print(f"[RX-Decode] Befehl erkannt: '{command}'")
+        new_input_action(command)
+    else:
+        print(f"[RX-Decode] Unbekanntes Format: '{text}'")
+
+
 #-----------------------------------------------------------------------------
-# WS2812-Instanz erstellen (auf Pin 2-9, 178 LEDs pro Strip)
+# WS2812-Instanz erstellen (auf Pin 2-9, 172 LEDs pro Strip)
 #-----------------------------------------------------------------------------
 global leds
 leds = WS2812ParallelAsync(
@@ -171,13 +213,13 @@ def new_input_action(action_input):
         if len(parts) == 4 and parts[2].isdigit():
             obj_value = int(parts[2])
             print(f"Objekt-Wert erkannt: {obj_value}")
-            asyncio.create_task(do_send_msg_bus(str(obj_value)))
+            #asyncio.create_task(do_send_msg_bus(str(obj_value)))
         else:
             print(f"[INPUT-FEHLER] Ungültiges Format: {action_input}")
             return
     elif action_input == "do,all,def":
         print("[INPUT] Befehl 'do,all,def' erkannt. Setze alle Animationen auf Default.")
-        asyncio.create_task(do_send_msg_bus())
+        #asyncio.create_task(do_send_msg_bus())
         func_all_def()
         return
     else:
